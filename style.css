@@ -1,0 +1,131 @@
+/* Basic Reset & General Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; /* Makes width/height calculations more intuitive */
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f2f5; /* A light grey background */
+    color: #333;
+    line-height: 1.6;
+    display: flex;
+    justify-content: center;
+    padding-top: 40px;
+    min-height: 100vh;
+}
+
+.app-container {
+    background-color: #ffffff; /* White background for the app itself */
+    padding: 25px 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 550px; /* Max width for the app */
+}
+
+header h1 {
+    text-align: center;
+    color: #2c3e50; /* A darker blue-grey for the title */
+    margin-bottom: 25px;
+}
+
+/* Form Styles */
+#task-form {
+    display: flex; /* Input and button side-by-side */
+    margin-bottom: 25px;
+}
+
+#task-input {
+    flex-grow: 1; /* Input takes up available space */
+    padding: 12px 15px;
+    border: 1px solid #dcdfe6; /* Light grey border */
+    border-radius: 5px 0 0 5px; /* Rounded corners on the left */
+    font-size: 16px;
+    outline: none; /* Remove default focus outline */
+}
+
+#task-input:focus {
+    border-color: #409eff; /* Blue border on focus, a common UI pattern */
+}
+
+#add-task-button {
+    padding: 12px 20px;
+    background-color: #409eff; /* Blue background */
+    color: white;
+    border: 1px solid #409eff;
+    border-left: none; /* Avoid double border with input */
+    border-radius: 0 5px 5px 0; /* Rounded corners on the right */
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.2s ease; /* Smooth hover effect */
+}
+
+#add-task-button:hover {
+    background-color: #337ecc; /* Darker blue on hover */
+}
+
+/* Task List Section Styles */
+.task-list-section h2 {
+    color: #2c3e50;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #e4e7ed; /* Separator line */
+    padding-bottom: 8px;
+}
+
+#task-list {
+    list-style-type: none; /* Remove default list bullets */
+}
+
+/* Styles for individual task items (will be added via JS) */
+.task-item {
+    background-color: #f9fafb; /* Very light grey for task items */
+    border: 1px solid #e4e7ed;
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between; /* Text on left, buttons on right */
+    align-items: center;
+    transition: background-color 0.2s ease;
+}
+
+.task-item:hover {
+    background-color: #f3f4f6;
+}
+
+.task-item span { /* The text of the task */
+    flex-grow: 1;
+    margin-right: 10px;
+    word-break: break-word; /* Prevent long words from overflowing */
+}
+
+.task-item.completed span {
+    text-decoration: line-through;
+    color: #909399; /* Greyed out text for completed tasks */
+}
+
+.task-item .actions button { /* Buttons within a task item */
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    margin-left: 8px; /* Space between buttons */
+    padding: 5px;
+    transition: color 0.2s ease;
+}
+
+.task-item .complete-button {
+    color: #67c23a; /* Green for complete */
+}
+.task-item .complete-button:hover {
+    color: #52a02d;
+}
+
+.task-item .delete-button {
+    color: #f56c6c; /* Red for delete */
+}
+.task-item .delete-button:hover {
+    color: #d34d4d;
+}
