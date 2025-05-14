@@ -108,3 +108,31 @@ taskList.addEventListener('click', function(event) {
         return; // Stop further processing if we handled a delete button
     }
 });
+
+// *** LOCAL STORAGE FUNCTIONS ***
+
+// Function to get tasks from local storage
+function getTaskFromLocalStorage() {
+    let tasks;
+    if (localStorage.getItem('tasks') === null) {
+        tasks = []; // Initialize an empty array if no tasks are found
+    } else {
+        tasks = JSON.parse(localStorage.getItem('tasks')); // Parse the JSON string into an array
+    }
+    return tasks;
+}
+
+// Function to display tasks from local storage on page load
+function displayTasksOnLoad() {
+    const tasks = getTasksFromLocalStorage();
+    tasks.forEach(function(taskData) {
+        // We need to pass not just the text, but also the completed status
+        addTaskToDom(taskData.text, taskData.completed);
+    })
+    console.log('Tasks loaded from local storage and displayed');
+}
+
+// *** INITIALIZATION ***
+
+// Call this function when the page loads to display any stored tasks
+document.addEventListener('DOMContentLoaded', displayTasksOnLoad);
