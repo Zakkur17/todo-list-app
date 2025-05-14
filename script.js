@@ -6,7 +6,51 @@ const taskList = document.getElementById('task-list');
 // Let's test if we selected them correctly
 console.log(taskForm, taskInput, taskList);
 
-// Add event listener to the form
+// Function to create and add a new task item to the DOM
+function addTaskToDom(taskText) {
+    console.log('AddTaskToDom called with text:', taskText);
+
+    // 1. create the list item (<li>)
+    const listItem = document.createElement('li');
+    listItem.classList.add('task-item'); // Add a class for styling
+
+    // 2. create the span element for the task text
+    const taskTextSpan = document.createElement('span');
+    taskTextSpan.textContent = taskText; // Set the text content
+
+    // 3. Create a container for action buttons
+    const actionsDiv = document.createElement('div');
+    actionsDiv.classList.add('actions');
+
+    // 4. Create the "Complete" button
+    const completeButton = document.createElement('button');
+    completeButton.classList.add('complete-button');
+    completeButton.innerHTML = '✓';
+
+    // 5. Create the "Delete" button
+    const deleteButton = document.createElement('button');
+    deleteButton.classList.add('delete-button');
+    deleteButton.innerHTML = '✗';
+
+    // 6. Append buttons to the actions container
+    actionsDiv.appendChild(completeButton);
+    actionsDiv.appendChild(deleteButton);
+
+    // 7. Append the text span and actions container to the list item
+    listItem.appendChild(taskTextSpan);
+    listItem.appendChild(actionsDiv);
+
+    // 8. Append the new list item to the task list (<ul>)
+    taskList.appendChild(listItem);
+
+    console.log('Task item added to DOM:', listItem);
+}
+
+
+
+
+
+// Event listener for form submission
 taskForm.addEventListener('submit', function(event) {
     event.preventDefault();
     
@@ -18,6 +62,7 @@ taskForm.addEventListener('submit', function(event) {
   // Use the length check for the if-condition
   if (taskText.length > 0) {
     console.log('Task added:', taskText);
+    addTaskToDom(taskText); // Call the function to add the task to the DOM
 
     taskInput.value = ''; // Clear the input field
     taskInput.focus(); // Set focus back to the input field
@@ -27,4 +72,39 @@ taskForm.addEventListener('submit', function(event) {
     alert('Please enter a task.'); // Show an alert if the input is empty
   }
 
+});
+
+// Event Listener for clicks whithin the task list (using event delegation)
+taskList.addEventListener('click', function(event) {
+    // event.target is the actual element that was clicked inside the taskList
+    const clickedElement = event.target;
+    console.log('Clicked inside taskList on:', clickedElement);
+
+    // Check if the "Complete" button was clicked
+    // We check if the clicked element OR its parent has the 'complete-button' class
+    // This is because the click might be on the icon inside the button.
+    const completeButton = clickedElement.closest('.complete-button');
+    if (completeButton) {
+        console.log('Complete button was clicked');
+        // Find the parent <li> element (the task item)
+        const taskItem = completeButton.closest('.task-item');
+        if (taskItem) {
+            taskItem.classList.toggle('completed'); // Toggle the .completed class
+            console.log('Toggled .completed class on:', taskItem);
+        }
+        return; // Stop further processing if we handled a complete button
+    }
+
+    // Check if the "Delete" button was clicked
+    const deleteButton = clickedElement.closest('.delete-button');
+    if (deleteButton) {
+        console.log('Delete button was clicked');
+        // Find the parent <li> element (the task item)
+        const taskItem = deleteButton.closest('.task-item');
+        if (taskItem) {
+            taskItem.remove(); // Remove the task item from the DOM
+            console.log('Removed task item:', taskItem);
+        }
+        return; // Stop further processing if we handled a delete button
+    }
 });
