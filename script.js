@@ -7,12 +7,15 @@ const taskList = document.getElementById('task-list');
 console.log(taskForm, taskInput, taskList);
 
 // Function to create and add a new task item to the DOM
-function addTaskToDom(taskText) {
-    console.log('AddTaskToDom called with text:', taskText);
+function addTaskToDom(taskText, isCompleted = false) { // Default isCompleted to false
+    console.log('AddTaskToDom called with text:', taskText, 'Completed:', isCompleted);
 
     // 1. create the list item (<li>)
     const listItem = document.createElement('li');
     listItem.classList.add('task-item'); // Add a class for styling
+    if (isCompleted) {
+        listItem.classList.add('completed');
+    }
 
     // 2. create the span element for the task text
     const taskTextSpan = document.createElement('span');
@@ -42,8 +45,6 @@ function addTaskToDom(taskText) {
 
     // 8. Append the new list item to the task list (<ul>)
     taskList.appendChild(listItem);
-
-    console.log('Task item added to DOM:', listItem);
 }
 
 
@@ -63,6 +64,7 @@ taskForm.addEventListener('submit', function(event) {
   if (taskText.length > 0) {
     console.log('Task added:', taskText);
     addTaskToDom(taskText); // Call the function to add the task to the DOM
+    saveTasksToLocalStorage(); // Save tasks to local storage
 
     taskInput.value = ''; // Clear the input field
     taskInput.focus(); // Set focus back to the input field
@@ -90,6 +92,7 @@ taskList.addEventListener('click', function(event) {
         const taskItem = completeButton.closest('.task-item');
         if (taskItem) {
             taskItem.classList.toggle('completed'); // Toggle the .completed class
+            saveTasksToLocalStorage();
             console.log('Toggled .completed class on:', taskItem);
         }
         return; // Stop further processing if we handled a complete button
@@ -103,6 +106,7 @@ taskList.addEventListener('click', function(event) {
         const taskItem = deleteButton.closest('.task-item');
         if (taskItem) {
             taskItem.remove(); // Remove the task item from the DOM
+            saveTasksToLocalStorage();
             console.log('Removed task item:', taskItem);
         }
         return; // Stop further processing if we handled a delete button
@@ -112,7 +116,7 @@ taskList.addEventListener('click', function(event) {
 // *** LOCAL STORAGE FUNCTIONS ***
 
 // Function to get tasks from local storage
-function getTaskFromLocalStorage() {
+function getTasksFromLocalStorage() {
     let tasks;
     if (localStorage.getItem('tasks') === null) {
         tasks = []; // Initialize an empty array if no tasks are found
@@ -120,6 +124,21 @@ function getTaskFromLocalStorage() {
         tasks = JSON.parse(localStorage.getItem('tasks')); // Parse the JSON string into an array
     }
     return tasks;
+}
+
+// Function to save all current tasks to Local Storage
+function saveTasksToLocalStorage() {
+    const taskItems = taskList.querySelectorAll('.task-item'); // Get all <li> elements
+    const taskToSave = [];
+
+    taskItems.forEach(function(taskItem) {
+        const taskText = taskItem.querySelector('span').textContent; // Get the text
+        const isCompleted = taskItem.classList.contains('completed'); // Check if it's completed
+        taskToSave.push({ text: taskText, completed: isCompleted }); // Push to the array
+    });
+
+    localStorage.setItem('tasks', JSON.stringify(taskToSave)); // Save the array to local storage
+    console.log('Tasks saved to local storage:', taskToSave);
 }
 
 // Function to display tasks from local storage on page load
@@ -131,6 +150,7 @@ function displayTasksOnLoad() {
     })
     console.log('Tasks loaded from local storage and displayed');
 }
+
 
 // *** INITIALIZATION ***
 
