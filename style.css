@@ -129,3 +129,10 @@ header h1 {
 .task-item .delete-button:hover {
     color: #d34d4d;
 }
+
+.task-counter-container {
+    margin-bottom: 10px;
+    font-size: 0.9em;
+    color: #555;
+    text-align: left;
+}

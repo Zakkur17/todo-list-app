@@ -1,10 +1,11 @@
 // Select DOM elements
 const taskForm = document.getElementById('task-form');
 const taskInput = document.getElementById('task-input');
-const taskList = document.getElementById('task-list');
+const taskList = document.getElementById('task-list'); 
+const activeTasksCountSpan=  document.getElementById('active-tasks-count');
 
 // Let's test if we selected them correctly
-console.log(taskForm, taskInput, taskList);
+console.log(taskForm, taskInput, taskList, activeTasksCountSpan);
 
 // Function to create and add a new task item to the DOM
 function addTaskToDom(taskText, isCompleted = false) { // Default isCompleted to false
@@ -65,6 +66,7 @@ taskForm.addEventListener('submit', function(event) {
     console.log('Task added:', taskText);
     addTaskToDom(taskText); // Call the function to add the task to the DOM
     saveTasksToLocalStorage(); // Save tasks to local storage
+    updateActiveTasksCount(); // A new task is added and always active, so update the count
 
     taskInput.value = ''; // Clear the input field
     taskInput.focus(); // Set focus back to the input field
@@ -93,6 +95,7 @@ taskList.addEventListener('click', function(event) {
         if (taskItem) {
             taskItem.classList.toggle('completed'); // Toggle the .completed class
             saveTasksToLocalStorage();
+            updateActiveTasksCount(); // Update the count after toggling
             console.log('Toggled .completed class on:', taskItem);
         }
         return; // Stop further processing if we handled a complete button
@@ -107,6 +110,7 @@ taskList.addEventListener('click', function(event) {
         if (taskItem) {
             taskItem.remove(); // Remove the task item from the DOM
             saveTasksToLocalStorage();
+            updateActiveTasksCount(); // Update the count after deletion
             console.log('Removed task item:', taskItem);
         }
         return; // Stop further processing if we handled a delete button
@@ -141,6 +145,15 @@ function saveTasksToLocalStorage() {
     console.log('Tasks saved to local storage:', taskToSave);
 }
 
+// Function to update the active tasks count
+// This function is called whenever a task is added, completed, or deleted
+function updateActiveTasksCount() {
+    const incompleteTaskItems = taskList.querySelectorAll('.task-item:not(.completed)');
+    const count = incompleteTaskItems.length;
+    activeTasksCountSpan.textContent = count;
+    console.log('Active tasks count updated to:', count);
+}
+
 // Function to display tasks from local storage on page load
 function displayTasksOnLoad() {
     const tasks = getTasksFromLocalStorage();
@@ -148,6 +161,7 @@ function displayTasksOnLoad() {
         // We need to pass not just the text, but also the completed status
         addTaskToDom(taskData.text, taskData.completed);
     })
+    updateActiveTasksCount(); // Update the count after loading tasks
     console.log('Tasks loaded from local storage and displayed');
 }
 
