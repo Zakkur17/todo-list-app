@@ -136,3 +136,22 @@ header h1 {
     color: #555;
     text-align: left;
 }
+
+.list-actions {
+    margin-top: 20px;
+    text-align: right;
+}
+
+#clear-completed-button {
+    padding: 8px 15px;
+    background-color: #f56c6c;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9em;
+}
+
+#clear-completed-button:hover {
+    background-color: #d34d4d;
+}

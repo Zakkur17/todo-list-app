@@ -3,9 +3,10 @@ const taskForm = document.getElementById('task-form');
 const taskInput = document.getElementById('task-input');
 const taskList = document.getElementById('task-list'); 
 const activeTasksCountSpan=  document.getElementById('active-tasks-count');
+const clearCompletedButton = document.getElementById('clear-completed-button');
 
 // Let's test if we selected them correctly
-console.log(taskForm, taskInput, taskList, activeTasksCountSpan);
+console.log(taskForm, taskInput, taskList, activeTasksCountSpan, clearCompletedButton);
 
 // Function to create and add a new task item to the DOM
 function addTaskToDom(taskText, isCompleted = false) { // Default isCompleted to false
@@ -116,6 +117,27 @@ taskList.addEventListener('click', function(event) {
         return; // Stop further processing if we handled a delete button
     }
 });
+
+clearCompletedButton.addEventListener('click', function() {
+    console.log('Clear completed button clicked');
+    const completedTasks = taskList.querySelectorAll('.task-item.completed'); // Get all completed tasks
+
+    if (completedTasks.length === 0) {
+        alert('No completed tasks to clear.');
+        return; // Exit if there are no completed tasks
+    }
+
+    if (confirm(`Are you sure you want to delete ${completedTasks.length} completed task(s)?`)) {
+        completedTasks.forEach(function(taskItem) {
+            taskItem.remove(); // Remove each completed task item from the DOM
+        });
+        saveTasksToLocalStorage(); // Save the updated tasks to local storage
+        updateActiveTasksCount(); // Update the count after deletion (it should not change, but for consistency)
+        console.log('${completedTasks.length} completed tasks cleared');
+    }
+});
+
+
 
 // *** LOCAL STORAGE FUNCTIONS ***
 
