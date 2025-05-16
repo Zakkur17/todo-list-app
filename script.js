@@ -4,6 +4,7 @@ const taskInput = document.getElementById('task-input');
 const taskList = document.getElementById('task-list'); 
 const activeTasksCountSpan=  document.getElementById('active-tasks-count');
 const clearCompletedButton = document.getElementById('clear-completed-button');
+const filterControlContainer = document.querySelector('.filter-controls');
 
 // Let's test if we selected them correctly
 console.log(taskForm, taskInput, taskList, activeTasksCountSpan, clearCompletedButton);
@@ -137,6 +138,53 @@ clearCompletedButton.addEventListener('click', function() {
     }
 });
 
+// Event listener for filter controls
+filterControlContainer.addEventListener('click', function(event) {
+    const clickedButton = event.target.closest('.filter-btn');
+
+    if (clickedButton) {
+        console.log('Filter button clicked:', clickedButton.dataset.filter);
+
+        // Remove 'active' class from all filter buttons
+        filterControlContainer.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+        // Add 'active' class to the clicked button
+        clickedButton.classList.add('active');
+
+        const filterValue = clickedButton.dataset.filter;
+        filterTasks(filterValue);
+    }
+});
+
+// Function to filter tasks
+function filterTasks(filter) {
+    console.log('Filtering tasks by:', filter);
+    const taskItems = taskList.querySelectorAll('.task-item');
+
+    taskItems.forEach(function(taskItem) {
+        // Reset: remove 'hide' class first
+        taskItem.classList.remove('hide');
+
+        const isCompleted = taskItem.classList.contains('completed');
+
+        switch (filter) {
+            case 'active':
+                if (isCompleted) {
+                    taskItem.classList.add('hide');
+                }
+                break;
+            case 'completed':
+                if (!isCompleted) {
+                    taskItem.classList.add('hide');
+                }
+                break;
+            case 'all':
+            default:
+                // Do nothing, show all items (hide already removed)
+                break;
+        }
+    });
+}
+
 
 
 // *** LOCAL STORAGE FUNCTIONS ***
@@ -184,6 +232,7 @@ function displayTasksOnLoad() {
         addTaskToDom(taskData.text, taskData.completed);
     })
     updateActiveTasksCount(); // Update the count after loading tasks
+    filterTasks('all'); // Show all tasks by default
     console.log('Tasks loaded from local storage and displayed');
 }
 

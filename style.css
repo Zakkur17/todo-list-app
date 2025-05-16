@@ -155,3 +155,35 @@ header h1 {
 #clear-completed-button:hover {
     background-color: #d34d4d;
 }
+
+.filter-controls {
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.filter-btn {
+    padding: 6px 12px;
+    border: 1px solid #dcdfe6;
+    background-color: #fff;
+    color: #409eff;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.filter-btn.active {
+    background-color: #409eff;
+    color: white;
+    border-color: #409eff;
+}
+
+.filter-btn:hover:not(.active) {
+    background-color: #f0f2f5;
+    border-color: #b3d8ff;
+}
+
+/* CSS to hide tasks based on filter (simple approach) */
+.task-item.hide {
+    display: none !important; /* !important to override other styles */
+}
